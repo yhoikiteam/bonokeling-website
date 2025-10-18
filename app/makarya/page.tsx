@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, ExternalLink, Package, Heart } from "lucide-react";
+import { ShoppingCart, ExternalLink } from "lucide-react";
 import { motion, Variants } from "framer-motion"; 
+
 
 // ASUMSI: Import Navbar dari path yang sesuai
 import Navbar from '@/components/Navbar'; 

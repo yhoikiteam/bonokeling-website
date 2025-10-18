@@ -2,19 +2,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Zap, BookOpen, Music, Video, Star, ChevronLeft, ChevronRight, Package } from "lucide-react";
-import { motion, Variants, AnimatePresence } from "framer-motion";
+import { motion, Variants, AnimatePresence, easeInOut } from "framer-motion";
 import { useState } from "react";
-
-// Import Navbar
 import Navbar from '@/components/Navbar'; 
 
 // ----------------------------------------------------
-// MOCK DATA KEARIFAN LOKAL
+// INTERFACE DAN DATA KEARIFAN
 // ----------------------------------------------------
 interface NilaiKearifan {
   id: number;
   title: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
   description: string;
 }
 
@@ -45,45 +43,47 @@ const kearifanLokal: NilaiKearifan[] = [
   },
 ];
 
-// MOCK DATA MACAPAT
+// ----------------------------------------------------
+// DATA MACAPAT
+// ----------------------------------------------------
 const macapatData = {
-    title: "Serat Sejarah Nabi: Macapat Bonokeling",
-    excerpt: "Pembacaan Macapat Bonokeling memiliki ciri khas yang berbeda dari Macapat pada umumnya, menekankan pada keluhuran leluhur dan ajaran Eyang Bonokeling. Naskah ini adalah warisan turun-temurun yang kini diupayakan untuk dilestarikan melalui transliterasi.",
-    videoUrl: "https://www.youtube.com/embed/UGAuIyL0h44",
-    tembangExample: [
-        {
-            type: "Dhandhanggula (Contoh)",
-            text: `
+  title: "Serat Sejarah Nabi: Macapat Bonokeling",
+  excerpt: "Pembacaan Macapat Bonokeling memiliki ciri khas yang berbeda dari Macapat pada umumnya, menekankan pada keluhuran leluhur dan ajaran Eyang Bonokeling. Naskah ini adalah warisan turun-temurun yang kini diupayakan untuk dilestarikan melalui transliterasi.",
+  videoUrl: "https://www.youtube.com/embed/UGAuIyL0h44",
+  tembangExample: [
+    {
+      type: "Dhandhanggula (Contoh)",
+      text: `
 Padha gulangen ing kalbu,
 Ing sasmita amrih lantip,
 Aja pijer mangan nendra,
 Karaketan lan dhendhening,
 Mrih tan dadi wong edan,
 Mangka sira wong kang linuwih.
-            `,
-            meaning: "Latihlah hati dan budi, agar peka terhadap isyarat, jangan hanya makan dan tidur, karena terikat pada hawa nafsu, agar tidak menjadi orang gila, sebab engkau adalah orang yang istimewa."
-        },
-    ]
+      `,
+      meaning: "Latihlah hati dan budi, agar peka terhadap isyarat, jangan hanya makan dan tidur, karena terikat pada hawa nafsu, agar tidak menjadi orang gila, sebab engkau adalah orang yang istimewa."
+    },
+  ]
 }
 
 // ----------------------------------------------------
-// Framer Motion Variants
+// FRAMER MOTION VARIANTS
 // ----------------------------------------------------
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.1 } 
+    transition: { duration: 0.8, ease: easeInOut, staggerChildren: 0.1 } 
   },
 };
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeInOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeInOut } },
 };
 
-// Variants untuk slider buku (3D flip effect)
+// Slider Variants (3D flip)
 const slideVariants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 1000 : -1000,
@@ -95,61 +95,61 @@ const slideVariants: Variants = {
     x: 0,
     opacity: 1,
     rotateY: 0,
-    transition: { duration: 0.8, ease: "easeInOut" },
+    transition: { duration: 0.8, ease: easeInOut },
   },
   exit: (direction: number) => ({
     zIndex: 0,
     x: direction < 0 ? 1000 : -1000,
     opacity: 0,
     rotateY: direction < 0 ? 90 : -90,
-    transition: { duration: 0.8, ease: "easeInOut" },
+    transition: { duration: 0.8, ease: easeInOut },
   }),
 };
 
 // ----------------------------------------------------
-// Komponen Slider Kearifan
+// KOMPONEN SLIDER KEARIFAN
 // ----------------------------------------------------
 const KearifanSlider = () => {
-    const [[page, direction], setPage] = useState([0, 0]);
-    const currentIndex = ((page % kearifanLokal.length) + kearifanLokal.length) % kearifanLokal.length; // fix negatif index
-    const item = kearifanLokal[currentIndex];
+  const [[page, direction], setPage] = useState([0, 0]);
+  const currentIndex = ((page % kearifanLokal.length) + kearifanLokal.length) % kearifanLokal.length;
+  const item = kearifanLokal[currentIndex];
 
-    const paginate = (newDirection: number) => setPage([page + newDirection, newDirection]);
+  const paginate = (newDirection: number) => setPage([page + newDirection, newDirection]);
 
-    return (
-        <div className="relative h-[400px] w-full max-w-2xl mx-auto perspective-1000">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
-                <motion.div
-                    key={page}
-                    custom={direction}
-                    variants={slideVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    className="absolute top-0 left-0 w-full h-full p-8 rounded-xl shadow-2xl bg-black/60 backdrop-blur-sm border border-[#8B5E3C]/50 flex flex-col justify-center items-center text-center"
-                >
-                    <div className="mb-4 p-4 rounded-full bg-[#D4A373]/20">{item.icon}</div>
-                    <h3 className="text-3xl font-extrabold text-[#D4A373] mb-3">{item.title}</h3>
-                    <p className="text-gray-300 text-lg max-w-lg">{item.description}</p>
-                    <div className="mt-6 text-sm font-semibold text-gray-500">
-                        Halaman {currentIndex + 1} dari {kearifanLokal.length}
-                    </div>
-                </motion.div>
-            </AnimatePresence>
+  return (
+    <div className="relative h-[400px] w-full max-w-2xl mx-auto perspective-1000">
+      <AnimatePresence initial={false} custom={direction} mode="wait">
+        <motion.div
+          key={page}
+          custom={direction}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="absolute top-0 left-0 w-full h-full p-8 rounded-xl shadow-2xl bg-black/60 backdrop-blur-sm border border-[#8B5E3C]/50 flex flex-col justify-center items-center text-center"
+        >
+          <div className="mb-4 p-4 rounded-full bg-[#D4A373]/20">{item.icon}</div>
+          <h3 className="text-3xl font-extrabold text-[#D4A373] mb-3">{item.title}</h3>
+          <p className="text-gray-300 text-lg max-w-lg">{item.description}</p>
+          <div className="mt-6 text-sm font-semibold text-gray-500">
+            Halaman {currentIndex + 1} dari {kearifanLokal.length}
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-            {/* Tombol Navigasi */}
-            <button className="absolute top-1/2 left-4 z-20 transform -translate-y-1/2 p-3 bg-white/10 text-white rounded-full hover:bg-[#D4A373]/70 transition" onClick={() => paginate(-1)} aria-label="Previous Page">
-                <ChevronLeft size={24}/>
-            </button>
-            <button className="absolute top-1/2 right-4 z-20 transform -translate-y-1/2 p-3 bg-white/10 text-white rounded-full hover:bg-[#D4A373]/70 transition" onClick={() => paginate(1)} aria-label="Next Page">
-                <ChevronRight size={24}/>
-            </button>
-        </div>
-    );
+      {/* Tombol Navigasi */}
+      <button className="absolute top-1/2 left-4 z-20 transform -translate-y-1/2 p-3 bg-white/10 text-white rounded-full hover:bg-[#D4A373]/70 transition" onClick={() => paginate(-1)} aria-label="Previous Page">
+        <ChevronLeft size={24}/>
+      </button>
+      <button className="absolute top-1/2 right-4 z-20 transform -translate-y-1/2 p-3 bg-white/10 text-white rounded-full hover:bg-[#D4A373]/70 transition" onClick={() => paginate(1)} aria-label="Next Page">
+        <ChevronRight size={24}/>
+      </button>
+    </div>
+  );
 };
 
 // ----------------------------------------------------
-// Halaman Utama ManegesPage
+// HALAMAN UTAMA
 // ----------------------------------------------------
 export default function ManegesPage() {
   const BG_IMAGE = "url('/images/bg-sec2.jpg')";
@@ -174,7 +174,7 @@ export default function ManegesPage() {
             
             {/* Header */}
             <motion.div variants={itemVariants} className="text-center mb-16">
-              <motion.div className="mx-auto w-24 h-24 mb-4 relative" initial={{y:0}} animate={{y:[0,-10,0]}} transition={{duration:2,repeat:Infinity,ease:"easeInOut"}} whileHover={{scale:1.1,filter:"drop-shadow(0 0 10px #D4A373)"}}>
+              <motion.div className="mx-auto w-24 h-24 mb-4 relative" initial={{y:0}} animate={{y:[0,-10,0]}} transition={{duration:2,repeat:Infinity,ease:easeInOut}} whileHover={{scale:1.1,filter:"drop-shadow(0 0 10px #D4A373)"}}>
                 <Image src="/images/iconbola/5.png" alt="Maneges Icon" fill className="object-contain"/>
               </motion.div>
               <motion.h2 variants={itemVariants} className="text-xl font-semibold text-[#D4A373] uppercase tracking-widest">Merenungi Ajaran Leluhur</motion.h2>
@@ -223,7 +223,7 @@ export default function ManegesPage() {
             </div>
 
             {/* CTA */}
-            <motion.div className="text-center mt-20" initial={{opacity:0,y:30}} animate={{opacity:1,y:0}} transition={{delay:0.8,duration:0.5}}>
+            <motion.div className="text-center mt-20" initial={{opacity:0,y:30}} animate={{opacity:1,y:0}} transition={{delay:0.8,duration:0.5, ease: easeInOut}}>
               <Link href="/galeri" className="inline-flex items-center px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#8B5E3C] to-[#D4A373] shadow-2xl shadow-[#D4A373]/40 transition hover:brightness-110">
                 Jelajahi Warisan Budaya Lainnya
                 <ChevronRight size={20} className="ml-2"/>

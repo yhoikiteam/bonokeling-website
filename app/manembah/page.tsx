@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, BookOpen, Music, Video, Star, ChevronLeft, ChevronRight, Package, Heart, Church, Hand, Home, Compass } from "lucide-react";
-import { motion, Variants } from "framer-motion"; 
-import { useState } from "react";
+import { Zap, BookOpen, Star, Package, Heart, Church, Hand, Home, Compass, ChevronRight } from "lucide-react";
+import { motion, Variants } from "framer-motion";
 
 // ASUMSI: Import Navbar dari path yang sesuai
 import Navbar from '@/components/Navbar'; 
@@ -14,7 +13,7 @@ import Navbar from '@/components/Navbar';
 interface KonsepReligi {
   id: number;
   title: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
   description: string;
 }
 
@@ -66,7 +65,6 @@ const tempatIbadah: KonsepReligi[] = [
     },
 ]
 
-
 // ----------------------------------------------------
 
 // Framer Motion Variants
@@ -89,29 +87,48 @@ const itemVariants: Variants = {
 };
 
 // Komponen Card Sederhana untuk Pilar dan Tempat
-const ManembahCard = ({ konsep }: { konsep: KonsepReligi }) => {
-    return (
-        <motion.div 
-            variants={itemVariants}
-            className="bg-black/50 backdrop-blur-sm p-6 rounded-xl shadow-xl transition-all duration-300 border-l-4 border-[#D4A373] hover:bg-black/70 flex flex-col items-start"
-        >
-            <div className="p-3 bg-[#D4A373]/20 rounded-full mb-3">
-                {konsep.icon}
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">{konsep.title}</h3>
-            <p className="text-gray-300 text-sm flex-grow">{konsep.description}</p>
-        </motion.div>
-    );
-};
+const ManembahCard = ({ konsep }: { konsep: KonsepReligi }) => (
+    <motion.div 
+        variants={itemVariants}
+        className="bg-black/50 backdrop-blur-sm p-6 rounded-xl shadow-xl transition-all duration-300 border-l-4 border-[#D4A373] hover:bg-black/70 flex flex-col items-start"
+    >
+        <div className="p-3 bg-[#D4A373]/20 rounded-full mb-3">
+            {konsep.icon}
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2">{konsep.title}</h3>
+        <p className="text-gray-300 text-sm flex-grow">{konsep.description}</p>
+    </motion.div>
+);
 
+// Tipe props RitualItem
+interface RitualItemProps {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+// Komponen Pembantu untuk Daftar Ritual
+const RitualItem = ({ title, description, icon }: RitualItemProps) => (
+    <motion.div 
+        variants={itemVariants}
+        className="flex items-start p-4 bg-black/50 rounded-lg border border-gray-700 hover:border-[#D4A373]/50 transition-all duration-300"
+    >
+        <div className="p-3 bg-[#8B5E3C] rounded-full flex-shrink-0 mr-4">
+            {icon}
+        </div>
+        <div>
+            <h4 className="text-xl font-semibold text-white">{title}</h4>
+            <p className="text-gray-400 text-sm mt-1">{description}</p>
+        </div>
+    </motion.div>
+);
 
 // Komponen Utama Page Manembah
 export default function ManembahPage() {
-  const BG_IMAGE = "url('/images/bg-sec3.jpg')"; // Asumsi gambar latar baru untuk konsistensi
+  const BG_IMAGE = "url('/images/bg-sec3.jpg')";
 
   return (
     <>
-      {/* PANGGIL KOMPONEN NAVBAR SEBAGAI FIXED HEADER */}
       <header className="w-full fixed top-0 z-50">
         <Navbar />
       </header>
@@ -126,28 +143,24 @@ export default function ManembahPage() {
           backgroundColor: '#111827',
         }}
       >
-        {/* Overlay Gelap */}
         <div className="absolute inset-0 bg-black/80 pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          {/* Konten Utama dengan Animasi Framer Motion */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {/* Header Section */}
             <motion.div variants={itemVariants} className="text-center mb-16">
               <motion.div 
                 className="mx-auto w-24 h-24 mb-4 relative"
                 initial={{ y: 0 }}
-                animate={{ y: [0, -10, 0] }} // Animasi mengambang
+                animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 whileHover={{ scale: 1.1, filter: "drop-shadow(0 0 10px #D4A373)" }} 
               >
                   <Image
-                      src="/images/iconbola/3.png" // Ikon Bola yang Konsisten
+                      src="/images/iconbola/3.png"
                       alt="Manembah Icon"
                       layout="fill" 
                       objectFit="contain"
@@ -165,7 +178,6 @@ export default function ManembahPage() {
               </motion.p>
             </motion.div>
 
-            {/* Bagian 1: Pilar Utama Manembah */}
             <div className="mb-20">
                 <motion.h3 variants={itemVariants} className="text-3xl font-bold text-white text-center mb-10 border-b border-[#D4A373]/50 pb-4">
                     4 Pilar Ajaran Spiritual
@@ -178,7 +190,6 @@ export default function ManembahPage() {
                 </div>
             </div>
 
-            {/* Bagian 2: Upacara Adat sebagai Wujud Ibadah */}
             <div className="bg-black/70 backdrop-blur-md p-10 rounded-xl shadow-2xl border border-[#8B5E3C]/50 mb-20">
                 <motion.h3 variants={itemVariants} className="text-3xl font-bold text-white mb-6 text-center flex items-center justify-center">
                     <Zap size={30} className="text-[#D4A373] mr-3" />
@@ -208,7 +219,6 @@ export default function ManembahPage() {
                 </div>
             </div>
 
-             {/* Bagian 3: Tempat Ibadah Sakral */}
             <div className="mb-20">
                 <motion.h3 variants={itemVariants} className="text-3xl font-bold text-white text-center mb-10 border-b border-[#D4A373]/50 pb-4">
                     Lokasi Sakral (Pusat Manembah)
@@ -221,8 +231,6 @@ export default function ManembahPage() {
                 </div>
             </div>
 
-
-            {/* CTA Penutup */}
             <motion.div 
                 className="text-center mt-20"
                 initial={{ opacity: 0, y: 30 }}
@@ -244,21 +252,3 @@ export default function ManembahPage() {
     </>
   );
 }
-
-// Komponen Pembantu untuk Daftar Ritual
-const RitualItem = ({ title, description, icon }) => {
-    return (
-        <motion.div 
-            variants={itemVariants}
-            className="flex items-start p-4 bg-black/50 rounded-lg border border-gray-700 hover:border-[#D4A373]/50 transition-all duration-300"
-        >
-            <div className="p-3 bg-[#8B5E3C] rounded-full flex-shrink-0 mr-4">
-                {icon}
-            </div>
-            <div>
-                <h4 className="text-xl font-semibold text-white">{title}</h4>
-                <p className="text-gray-400 text-sm mt-1">{description}</p>
-            </div>
-        </motion.div>
-    );
-};

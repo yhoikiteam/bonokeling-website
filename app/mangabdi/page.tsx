@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Zap, Hand, Heart, Leaf, Users, ChevronRight, Star, Lock } from "lucide-react";
-import { motion } from "framer-motion"; 
+import { motion, Variants, easeInOut } from "framer-motion"; 
 import Navbar from '@/components/Navbar';
 
 // ----------------------------------------------------
@@ -11,7 +11,7 @@ import Navbar from '@/components/Navbar';
 interface PengabdianItem {
   id: number;
   title: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
   description: string;
 }
 
@@ -72,22 +72,22 @@ const praktikMangabdi: PengabdianItem[] = [
 // ----------------------------------------------------
 // Framer Motion Variants
 // ----------------------------------------------------
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0, y: 50 },
   visible: { 
     opacity: 1, 
     y: 0, 
     transition: { 
       duration: 0.8, 
-      ease: "easeOut",
+      ease: easeInOut,
       staggerChildren: 0.1 
     } 
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeInOut } },
 };
 
 // ----------------------------------------------------
@@ -145,7 +145,7 @@ export default function MangabdiPage() {
                 className="mx-auto w-24 h-24 mb-4 relative"
                 initial={{ y: 0 }}
                 animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ duration: 2, repeat: Infinity, ease: easeInOut }}
                 whileHover={{ scale: 1.1, filter: "drop-shadow(0 0 10px #D4A373)" }} 
               >
                 <Image
@@ -181,7 +181,7 @@ export default function MangabdiPage() {
             </div>
 
             {/* Bagian 2: Praktik Harian */}
-            <div className="bg-black/70 backdrop-blur-md p-10 rounded-xl shadow-2xl border border-[#8B5E3C]/50 mb-20">
+            <div className="bg-black/70 backdrop-blur-md p-10 rounded-xl shadow-2xl border border-[#D4A373]/50 mb-20">
               <motion.h3 variants={itemVariants} className="text-3xl font-bold text-white mb-6 text-center flex items-center justify-center">
                 <Heart size={30} className="text-[#D4A373] mr-3" />
                 Praktik Pengabdian Harian

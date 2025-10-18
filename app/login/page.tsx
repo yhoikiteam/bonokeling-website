@@ -4,28 +4,23 @@ import { LogIn, User, Lock, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-// Reusing colors:
-// Primary Accent: #D4A373 (light brown/gold)
-// Secondary Accent: #8B5E3C (darker brown)
-// Tertiary/Dark Accent: #3b2a1a (very dark brown/almost black)
-
 export default function AdminLoginPage() {
   const [adminId, setAdminId] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = (e: any) => {
+  // Type-safe form event
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
-    // Simulate an API call
+    // Simulasi API call
     setTimeout(() => {
-      // Basic validation for demonstration
       if (adminId === "admin" && password === "password") {
         alert("Login Successful! (Placeholder Action)");
-        // In a real app: redirect to admin dashboard
+        // redirect dashboard di app asli
       } else {
         setError("Invalid Admin ID or Password.");
       }
@@ -40,15 +35,15 @@ export default function AdminLoginPage() {
 
   return (
     <section
-      className="min-h-screen flex items-center justify-center py-16 px-4"
+      className="min-h-screen flex items-center justify-center py-16 px-4 relative"
       style={{
-        backgroundImage: "url('/images/bg-pattern.png')", // Reuse background pattern
+        backgroundImage: "url('/images/bg-pattern.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundColor: "#111827", // Dark fallback
+        backgroundColor: "#111827",
       }}
     >
-      {/* Overlay Gradasi for aesthetic consistency */}
+      {/* Overlay gradasi */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px] pointer-events-none" />
 
       <motion.div
@@ -58,10 +53,9 @@ export default function AdminLoginPage() {
         className="relative z-10 w-full max-w-md p-8 sm:p-10 rounded-3xl border border-[#8B5E3C]/40 shadow-2xl bg-black/60 backdrop-blur-md"
       >
         <div className="flex flex-col items-center mb-8">
-          {/* Logo/Icon consistent with Navbar */}
           <div className="mb-4">
             <Image
-              src="/logo.png" // Assuming '/logo.png' exists
+              src="/logo.png"
               alt="Admin Login Icon"
               width={60}
               height={60}
@@ -77,7 +71,7 @@ export default function AdminLoginPage() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
-          {/* Admin ID Input */}
+          {/* Admin ID */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <User size={20} className="text-[#D4A373]" />
@@ -93,7 +87,7 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          {/* Password Input */}
+          {/* Password */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Lock size={20} className="text-[#D4A373]" />
