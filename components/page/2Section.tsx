@@ -4,17 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-interface EventHighlightProps {}
-
 const SOLID_BROWN_COLOR = "#875E4D";
 
-export default function EventHighlightSection({}: EventHighlightProps) {
+export default function EventHighlightSection() {
   return (
     <section
       className="relative w-full overflow-hidden"
       style={{
         backgroundImage: "url('/images/bg-sec2.jpg')",
-        backgroundSize: "cover", // full-width
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center center",
       }}
@@ -28,8 +26,8 @@ export default function EventHighlightSection({}: EventHighlightProps) {
               <Image
                 src="/images/bg-pattern.png"
                 alt="Perlon Senin Pahing Event"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: "cover" }}
                 className="w-full h-full"
               />
 
